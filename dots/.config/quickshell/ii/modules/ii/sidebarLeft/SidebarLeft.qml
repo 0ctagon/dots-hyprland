@@ -82,7 +82,7 @@ Scope { // Scope
 
     Loader {
         id: sidebarLoader
-        active: true
+        active: false
         
         sourceComponent: PanelWindow { // Window
             id: panelWindow

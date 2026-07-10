@@ -17,33 +17,33 @@ Item {
         spacing: 4
 
         StyledText {
-            font.pixelSize: Appearance.font.pixelSize.large
+            visible: root.showDate
+            font.pixelSize: Appearance.font.pixelSize.normal
             color: Appearance.colors.colOnLayer1
-            text: DateTime.time
+            text: DateTime.longDate
         }
 
         StyledText {
             visible: root.showDate
-            font.pixelSize: Appearance.font.pixelSize.small
+            font.pixelSize: Appearance.font.pixelSize.smallest
             color: Appearance.colors.colOnLayer1
             text: "•"
         }
 
         StyledText {
-            visible: root.showDate
-            font.pixelSize: Appearance.font.pixelSize.small
+            font.pixelSize: Appearance.font.pixelSize.normal
             color: Appearance.colors.colOnLayer1
-            text: DateTime.longDate
+            text: DateTime.time
         }
     }
 
-    MouseArea {
-        id: mouseArea
-        anchors.fill: parent
-        hoverEnabled: !Config.options.bar.tooltips.clickToShow
+    // MouseArea {
+    //     id: mouseArea
+    //     anchors.fill: parent
+    //     hoverEnabled: !Config.options.bar.tooltips.clickToShow
 
-        ClockWidgetPopup {
-            hoverTarget: mouseArea
-        }
-    }
+    //     ClockWidgetPopup {
+    //         hoverTarget: mouseArea
+    //     }
+    // }
 }

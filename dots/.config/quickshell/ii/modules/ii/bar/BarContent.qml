@@ -106,23 +106,20 @@ Item { // Bar content region
             bottom: parent.bottom
             horizontalCenter: parent.horizontalCenter
         }
-        spacing: 4
+        spacing: 80
 
         BarGroup {
             id: leftCenterGroup
             anchors.verticalCenter: parent.verticalCenter
             implicitWidth: root.centerSideModuleWidth
 
-            Resources {
-                alwaysShowAllResources: root.useShortenedForm === 2
-                Layout.fillWidth: root.useShortenedForm === 2
-            }
 
             Media {
-                visible: root.useShortenedForm < 2
+                visible: root.useShortenedForm < 0 // TODO
                 Layout.fillWidth: true
             }
         }
+
 
         VerticalBarSeparator {
             visible: Config.options?.bar.borderless
@@ -162,27 +159,6 @@ Item { // Bar content region
 
             onPressed: {
                 GlobalStates.sidebarRightOpen = !GlobalStates.sidebarRightOpen;
-            }
-
-            BarGroup {
-                id: rightCenterGroupContent
-                anchors.fill: parent
-
-                ClockWidget {
-                    showDate: (Config.options.bar.verbose && root.useShortenedForm < 2)
-                    Layout.alignment: Qt.AlignVCenter
-                    Layout.fillWidth: true
-                }
-
-                UtilButtons {
-                    visible: (Config.options.bar.verbose && root.useShortenedForm === 0)
-                    Layout.alignment: Qt.AlignVCenter
-                }
-
-                BatteryIndicator {
-                    visible: (root.useShortenedForm < 2 && Battery.available)
-                    Layout.alignment: Qt.AlignVCenter
-                }
             }
         }
     }
@@ -232,15 +208,21 @@ Item { // Bar content region
                 Layout.fillWidth: false
 
                 implicitWidth: indicatorsRowLayout.implicitWidth + 10 * 2
-                implicitHeight: indicatorsRowLayout.implicitHeight + 5 * 2
+                implicitHeight: indicatorsRowLayout.implicitHeight + 0 * 2
 
                 buttonRadius: Appearance.rounding.full
-                colBackground: barRightSideMouseArea.hovered ? Appearance.colors.colLayer1Hover : ColorUtils.transparentize(Appearance.colors.colLayer1Hover, 1)
-                colBackgroundHover: Appearance.colors.colLayer1Hover
-                colRipple: Appearance.colors.colLayer1Active
-                colBackgroundToggled: Appearance.colors.colSecondaryContainer
-                colBackgroundToggledHover: Appearance.colors.colSecondaryContainerHover
-                colRippleToggled: Appearance.colors.colSecondaryContainerActive
+                // colBackground: barRightSideMouseArea.hovered ? Appearance.colors.colLayer1Hover : ColorUtils.transparentize(Appearance.colors.colLayer1Hover, 1)
+                // colBackgroundHover: Appearance.colors.colLayer1Hover
+                // colRipple: Appearance.colors.colLayer1Active
+                // colBackgroundToggled: Appearance.colors.colSecondaryContainer
+                // colBackgroundToggledHover: Appearance.colors.colSecondaryContainerHover
+                // colRippleToggled: Appearance.colors.colSecondaryContainerActive
+                colBackground: Appearance.colors.colLayer0
+                colBackgroundHover:  Appearance.colors.colLayer0
+                colRipple:  Appearance.colors.colLayer0
+                colBackgroundToggled:  Appearance.colors.colLayer0
+                colBackgroundToggledHover:  Appearance.colors.colLayer0
+                colRippleToggled:  Appearance.colors.colLayer0
                 toggled: GlobalStates.sidebarRightOpen
                 property color colText: toggled ? Appearance.m3colors.m3onSecondaryContainer : Appearance.colors.colOnLayer0
 
@@ -258,9 +240,41 @@ Item { // Bar content region
                     property real realSpacing: 15
                     spacing: 0
 
+
+                    // SysTray {
+                    //     visible: root.useShortenedForm === 0
+                    //     Layout.fillWidth: false
+                    //     Layout.fillHeight: true
+                    //     invertSide: Config?.options.bar.bottom
+                    //     Layout.leftMargin: -245
+                    // }
+                    BatteryIndicator {
+                        visible: (root.useShortenedForm < 2 && Battery.available)
+                        Layout.alignment: Qt.AlignVCenter
+                        Layout.leftMargin: -40
+                    }
+
+
+                    Resources {
+                        alwaysShowAllResources: root.useShortenedForm === 2
+                        Layout.fillWidth: root.useShortenedForm === 2
+                        Layout.leftMargin: -220
+                    }
+
+
+                    BarGroup {
+                        id: rightCenterGroupContent
+                        anchors.fill: parent
+
+                        UtilButtons {
+                            visible: (Config.options.bar.verbose && root.useShortenedForm === 0)
+                            Layout.alignment: Qt.AlignVCenter
+                        }
+                    }
+
                     Revealer {
                         reveal: Audio.sink?.audio?.muted ?? false
-                        Layout.fillHeight: true
+                        // Layout.fillHeight: true
                         Layout.rightMargin: reveal ? indicatorsRowLayout.realSpacing : 0
                         Behavior on Layout.rightMargin {
                             animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
@@ -273,7 +287,7 @@ Item { // Bar content region
                     }
                     Revealer {
                         reveal: Audio.source?.audio?.muted ?? false
-                        Layout.fillHeight: true
+                        // Layout.fillHeight: true
                         Layout.rightMargin: reveal ? indicatorsRowLayout.realSpacing : 0
                         Behavior on Layout.rightMargin {
                             animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
@@ -291,7 +305,7 @@ Item { // Bar content region
                     }
                     Revealer {
                         reveal: Notifications.silent || Notifications.unread > 0
-                        Layout.fillHeight: true
+                        // Layout.fillHeight: true
                         Layout.rightMargin: reveal ? indicatorsRowLayout.realSpacing : 0
                         implicitHeight: reveal ? notificationUnreadCount.implicitHeight : 0
                         implicitWidth: reveal ? notificationUnreadCount.implicitWidth : 0
@@ -314,15 +328,17 @@ Item { // Bar content region
                         iconSize: Appearance.font.pixelSize.larger
                         color: rightSidebarButton.colText
                     }
+
+                    ClockWidget {
+                        showDate: (Config.options.bar.verbose && root.useShortenedForm < 2)
+                        Layout.alignment: Qt.AlignVCenter
+                        Layout.fillWidth: true
+                        Layout.leftMargin: 20
+            }
+
                 }
             }
 
-            SysTray {
-                visible: root.useShortenedForm === 0
-                Layout.fillWidth: false
-                Layout.fillHeight: true
-                invertSide: Config?.options.bar.bottom
-            }
 
             Item {
                 Layout.fillWidth: true
@@ -330,14 +346,14 @@ Item { // Bar content region
             }
 
             // Weather
-            Loader {
-                Layout.leftMargin: 4
-                active: Config.options.bar.weather.enable
+        //     Loader {
+        //         Layout.leftMargin: 800
+        //         active: Config.options.bar.weather.enable
 
-                sourceComponent: BarGroup {
-                    WeatherBar {}
-                }
-            }
+        //         sourceComponent: BarGroup {
+        //             WeatherBar {}
+        //         }
+        //     }
         }
     }
 }

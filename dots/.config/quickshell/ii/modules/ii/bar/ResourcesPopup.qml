@@ -21,6 +21,24 @@ StyledPopup {
             spacing: 8
 
             StyledPopupHeaderRow {
+                icon: "planner_review"
+                label: "CPU"
+            }
+            Column {
+                spacing: 4
+                StyledPopupValueRow {
+                    icon: "bolt"
+                    label: Translation.tr("Load:")
+                    value: `${Math.round(ResourceUsage.cpuUsage * 100)}%`
+                }
+            }
+        }
+
+        Column {
+            anchors.top: parent.top
+            spacing: 8
+
+            StyledPopupHeaderRow {
                 icon: "memory"
                 label: "RAM"
             }
@@ -43,6 +61,7 @@ StyledPopup {
                 }
             }
         }
+
 
         Column {
             visible: ResourceUsage.swapTotal > 0
@@ -69,24 +88,6 @@ StyledPopup {
                     icon: "empty_dashboard"
                     label: Translation.tr("Total:")
                     value: root.formatKB(ResourceUsage.swapTotal)
-                }
-            }
-        }
-
-        Column {
-            anchors.top: parent.top
-            spacing: 8
-
-            StyledPopupHeaderRow {
-                icon: "planner_review"
-                label: "CPU"
-            }
-            Column {
-                spacing: 4
-                StyledPopupValueRow {
-                    icon: "bolt"
-                    label: Translation.tr("Load:")
-                    value: `${Math.round(ResourceUsage.cpuUsage * 100)}%`
                 }
             }
         }

@@ -178,7 +178,7 @@ hl.bind("ALT + F4",
             "notify-send \"Wrong close keybind\" \"Super+Q to close. Use Alt+F4 for Windows VMs\" -a Hyprland")
     end,
     { non_consuming = true })
-hl.bind("SUPER + Q", hl.dsp.window.close(), { description = "Window: Close" })
+hl.bind("SUPER + W", hl.dsp.window.close(), { description = "Window: Close" })
 hl.bind("SUPER + SHIFT + ALT + Q", hl.dsp.exec_cmd("hyprctl kill"), { description = "Window: Forcefully zap a window" })
 
 --# Window split ratio
@@ -346,7 +346,7 @@ hl.bind("SUPER + Return", hl.dsp.exec_cmd(terminal), { description = "App: Termi
 hl.bind("SUPER + T", hl.dsp.exec_cmd(terminal))
 hl.bind("CTRL + ALT + T", hl.dsp.exec_cmd(terminal))
 hl.bind("SUPER + E", hl.dsp.exec_cmd(fileManager), { description = "App: File manager" })
-hl.bind("SUPER + W", hl.dsp.exec_cmd(browser), { description = "App: Browser" })
+hl.bind("SUPER + Q", hl.dsp.exec_cmd(browser), { description = "App: Browser" })
 hl.bind("SUPER + C", hl.dsp.exec_cmd(codeEditor), { description = "App: Code editor" })
 hl.bind("CTRL + SUPER + SHIFT + ALT + W", hl.dsp.exec_cmd(officeSoftware), { description = "App: Office software" })
 hl.bind("SUPER + X", hl.dsp.exec_cmd(textEditor), { description = "App: Text editor" })

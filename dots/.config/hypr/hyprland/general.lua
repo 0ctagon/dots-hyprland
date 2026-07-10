@@ -3,13 +3,13 @@ hl.monitor({
     output = "",
     mode = "preferred",
     position = "auto",
-    scale = 1
+    scale = 1.25
 })
 
 hl.gesture({
     fingers = 3,
-    direction = "swipe",
-    action = "move"
+    direction = "horizontal",
+    action = "workspace"
 })
 hl.gesture({
     fingers = 3,
@@ -19,17 +19,17 @@ hl.gesture({
 hl.gesture({
     fingers = 4,
     direction = "horizontal",
-    action = "workspace"
+    action = "move"
 })
 hl.gesture({
-    fingers = 4,
+    fingers = 3,
     direction = "up",
     action = function()
         hl.dispatch(hl.dsp.global("quickshell:overviewWorkspacesToggle"))
     end
 })
 hl.gesture({
-    fingers = 4,
+    fingers = 3,
     direction = "down",
     action = function()
         hl.dispatch(hl.dsp.global("quickshell:overviewWorkspacesToggle"))
@@ -47,11 +47,11 @@ hl.config({
     },
     general = {
         -- Gaps and border
-        gaps_in = 4,
-        gaps_out = 5,
+        gaps_in = 0,
+        gaps_out = 0,
         gaps_workspaces = 50,
 
-        border_size = 1,
+        border_size = 0,
 
         col = {
             active_border = "rgba(0DB7D455)",
@@ -71,8 +71,8 @@ hl.config({
     decoration = {
         -- 2 = circle, higher = squircle, 4 = very obvious squircle
         -- Fuck clearly visible squircles. 100% Apple brainrot.
-        rounding_power = 2.5,
-        rounding = 18,
+        rounding_power = 0,
+        rounding = 0,
 
         blur = {
             enabled = true,
@@ -254,7 +254,7 @@ hl.animation({
 
 hl.config({
     input = {
-        kb_layout = "us",
+        kb_layout = "jp",
         numlock_by_default = true,
         repeat_delay = 250,
         repeat_rate = 35,

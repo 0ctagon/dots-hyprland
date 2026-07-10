@@ -10,6 +10,7 @@ import Quickshell
 import Quickshell.Io
 import Quickshell.Wayland
 import Quickshell.Hyprland
+import Quickshell.Services.UPower
 
 Scope {
     id: root
@@ -117,25 +118,25 @@ Scope {
                             if (focus)
                                 sessionRoot.subtitle = buttonText;
                         }
-                        KeyNavigation.right: sessionSleep
-                        KeyNavigation.down: sessionHibernate
-                    }
-                    SessionActionButton {
-                        id: sessionSleep
-                        buttonIcon: "dark_mode"
-                        buttonText: Translation.tr("Sleep")
-                        onClicked: {
-                            Session.suspend();
-                            sessionRoot.hide();
-                        }
-                        onFocusChanged: {
-                            if (focus)
-                                sessionRoot.subtitle = buttonText;
-                        }
-                        KeyNavigation.left: sessionLock
                         KeyNavigation.right: sessionLogout
-                        KeyNavigation.down: sessionShutdown
+                        // KeyNavigation.down: sessionHibernate
                     }
+                    // SessionActionButton {
+                    //     id: sessionSleep
+                    //     buttonIcon: "dark_mode"
+                    //     buttonText: Translation.tr("Sleep")
+                    //     onClicked: {
+                    //         Session.suspend();
+                    //         sessionRoot.hide();
+                    //     }
+                    //     onFocusChanged: {
+                    //         if (focus)
+                    //             sessionRoot.subtitle = buttonText;
+                    //     }
+                    //     KeyNavigation.left: sessionLock
+                    //     KeyNavigation.right: sessionLogout
+                    //     KeyNavigation.down: sessionShutdown
+                    // }
                     SessionActionButton {
                         id: sessionLogout
                         buttonIcon: "logout"
@@ -148,57 +149,41 @@ Scope {
                             if (focus)
                                 sessionRoot.subtitle = buttonText;
                         }
-                        KeyNavigation.left: sessionSleep
-                        KeyNavigation.right: sessionTaskManager
-                        KeyNavigation.down: sessionReboot
-                    }
-                    SessionActionButton {
-                        id: sessionTaskManager
-                        buttonIcon: "browse_activity"
-                        buttonText: Translation.tr("Task Manager")
-                        onClicked: {
-                            Session.launchTaskManager();
-                            sessionRoot.hide();
-                        }
-                        onFocusChanged: {
-                            if (focus)
-                                sessionRoot.subtitle = buttonText;
-                        }
-                        KeyNavigation.left: sessionLogout
-                        KeyNavigation.down: sessionFirmwareReboot
-                    }
-
-                    SessionActionButton {
-                        id: sessionHibernate
-                        buttonIcon: "downloading"
-                        buttonText: Translation.tr("Hibernate")
-                        onClicked: {
-                            Session.hibernate();
-                            sessionRoot.hide();
-                        }
-                        onFocusChanged: {
-                            if (focus)
-                                sessionRoot.subtitle = buttonText;
-                        }
-                        KeyNavigation.up: sessionLock
-                        KeyNavigation.right: sessionShutdown
-                    }
-                    SessionActionButton {
-                        id: sessionShutdown
-                        buttonIcon: "power_settings_new"
-                        buttonText: Translation.tr("Shutdown")
-                        onClicked: {
-                            Session.poweroff();
-                            sessionRoot.hide();
-                        }
-                        onFocusChanged: {
-                            if (focus)
-                                sessionRoot.subtitle = buttonText;
-                        }
-                        KeyNavigation.left: sessionHibernate
+                        KeyNavigation.left: sessionLock
                         KeyNavigation.right: sessionReboot
-                        KeyNavigation.up: sessionSleep
+                        // KeyNavigation.down: sessionReboot
                     }
+                    // SessionActionButton {
+                    //     id: sessionTaskManager
+                    //     buttonIcon: "browse_activity"
+                    //     buttonText: Translation.tr("Task Manager")
+                    //     onClicked: {
+                    //         Session.launchTaskManager();
+                    //         sessionRoot.hide();
+                    //     }
+                    //     onFocusChanged: {
+                    //         if (focus)
+                    //             sessionRoot.subtitle = buttonText;
+                    //     }
+                    //     KeyNavigation.left: sessionLogout
+                    //     KeyNavigation.down: sessionFirmwareReboot
+                    // }
+
+                    // SessionActionButton {
+                    //     id: sessionHibernate
+                    //     buttonIcon: "downloading"
+                    //     buttonText: Translation.tr("Hibernate")
+                    //     onClicked: {
+                    //         Session.hibernate();
+                    //         sessionRoot.hide();
+                    //     }
+                    //     onFocusChanged: {
+                    //         if (focus)
+                    //             sessionRoot.subtitle = buttonText;
+                    //     }
+                    //     KeyNavigation.up: sessionLock
+                    //     KeyNavigation.right: sessionShutdown
+                    // }
                     SessionActionButton {
                         id: sessionReboot
                         buttonIcon: "restart_alt"
@@ -211,25 +196,46 @@ Scope {
                             if (focus)
                                 sessionRoot.subtitle = buttonText;
                         }
-                        KeyNavigation.left: sessionShutdown
-                        KeyNavigation.right: sessionFirmwareReboot
-                        KeyNavigation.up: sessionLogout
+                        KeyNavigation.left: sessionLogout
+                        KeyNavigation.right: sessionShutdown
+                        // KeyNavigation.up: sessionLogout
                     }
                     SessionActionButton {
-                        id: sessionFirmwareReboot
-                        buttonIcon: "settings_applications"
-                        buttonText: Translation.tr("Reboot to firmware settings")
-                        onClicked: {
-                            Session.rebootToFirmware();
-                            sessionRoot.hide();
+                        id: sessionShutdown
+                        buttonIcon: "power_settings_new"
+                        buttonText: Translation.tr("Shutdown")
+                        // onClicked: {
+                        //     Session.poweroff();
+                        //     sessionRoot.hide();
+                        // }
+                        onClicked:  {
+                            PowerProfiles.profile = PowerProfile.Balanced;
+                            Session.poweroff();
+                            sessionRoot.hide()
                         }
                         onFocusChanged: {
                             if (focus)
                                 sessionRoot.subtitle = buttonText;
                         }
-                        KeyNavigation.up: sessionTaskManager
                         KeyNavigation.left: sessionReboot
+                        // KeyNavigation.right: sessionReboot
+                        // KeyNavigation.up: sessionSleep
                     }
+                    // SessionActionButton {
+                    //     id: sessionFirmwareReboot
+                    //     buttonIcon: "settings_applications"
+                    //     buttonText: Translation.tr("Reboot to firmware settings")
+                    //     onClicked: {
+                    //         Session.rebootToFirmware();
+                    //         sessionRoot.hide();
+                    //     }
+                    //     onFocusChanged: {
+                    //         if (focus)
+                    //             sessionRoot.subtitle = buttonText;
+                    //     }
+                    //     KeyNavigation.up: sessionTaskManager
+                    //     KeyNavigation.left: sessionReboot
+                    // }
                 }
 
                 DescriptionLabel {

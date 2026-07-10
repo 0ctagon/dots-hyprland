@@ -39,7 +39,7 @@ Singleton {
 
     function poweroff() {
         closeAllWindows();
-        Quickshell.execDetached(["bash", "-c", `systemctl poweroff || loginctl poweroff`]);
+        Quickshell.execDetached(["bash", "-c", `sleep 1 && (shutdown now || systemctl poweroff || loginctl poweroff)`]);
     }
 
     function reboot() {

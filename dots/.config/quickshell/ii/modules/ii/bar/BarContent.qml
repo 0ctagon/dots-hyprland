@@ -59,8 +59,8 @@ Item { // Bar content region
         implicitWidth: leftSectionRowLayout.implicitWidth
         implicitHeight: Appearance.sizes.baseBarHeight
 
-        onScrollDown: Brightness.decreaseBrightness()
-        onScrollUp: Brightness.increaseBrightness()
+        // onScrollDown: Brightness.decreaseBrightness()
+        // onScrollUp: Brightness.increaseBrightness()
         onMovedAway: GlobalStates.osdBrightnessOpen = false
         onPressed: event => {
             if (event.button === Qt.LeftButton)
@@ -68,14 +68,14 @@ Item { // Bar content region
         }
 
         // Visual content
-        ScrollHint {
-            reveal: barLeftSideMouseArea.hovered
-            icon: Hyprsunset.gamma === 100 ? "light_mode" : "wb_twilight"
-            tooltipText: Translation.tr("Scroll to change brightness")
-            side: "left"
-            anchors.left: parent.left
-            anchors.verticalCenter: parent.verticalCenter
-        }
+        // ScrollHint {
+        //     reveal: barLeftSideMouseArea.hovered
+        //     icon: Hyprsunset.gamma === 100 ? "light_mode" : "wb_twilight"
+        //     tooltipText: Translation.tr("Scroll to change brightness")
+        //     side: "left"
+        //     anchors.left: parent.left
+        //     anchors.verticalCenter: parent.verticalCenter
+        // }
 
         RowLayout {
             id: leftSectionRowLayout
@@ -175,8 +175,8 @@ Item { // Bar content region
         implicitWidth: rightSectionRowLayout.implicitWidth
         implicitHeight: Appearance.sizes.baseBarHeight
 
-        onScrollDown: Audio.decrementVolume();
-        onScrollUp: Audio.incrementVolume();
+        // onScrollDown: Audio.decrementVolume();
+        // onScrollUp: Audio.incrementVolume();
         onMovedAway: GlobalStates.osdVolumeOpen = false;
         onPressed: event => {
             if (event.button === Qt.LeftButton) {
@@ -185,14 +185,14 @@ Item { // Bar content region
         }
 
         // Visual content
-        ScrollHint {
-            reveal: barRightSideMouseArea.hovered
-            icon: "volume_up"
-            tooltipText: Translation.tr("Scroll to change volume")
-            side: "right"
-            anchors.right: parent.right
-            anchors.verticalCenter: parent.verticalCenter
-        }
+        // ScrollHint {
+        //     reveal: barRightSideMouseArea.hovered
+        //     icon: "volume_up"
+        //     tooltipText: Translation.tr("Scroll to change volume")
+        //     side: "right"
+        //     anchors.right: parent.right
+        //     anchors.verticalCenter: parent.verticalCenter
+        // }
 
         RowLayout {
             id: rightSectionRowLayout

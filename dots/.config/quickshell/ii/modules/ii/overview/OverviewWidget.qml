@@ -10,6 +10,7 @@ import QtQuick.Layouts
 import Quickshell
 import Quickshell.Wayland
 import Quickshell.Hyprland
+import Quickshell.Widgets
 
 Item {
     id: root
@@ -28,10 +29,10 @@ Item {
     property real scale: Config.options.overview.scale
     property color activeBorderColor: Appearance.colors.colSecondary
 
-    property real workspaceImplicitWidth: (monitorData?.transform % 2 === 1) ? 
+    property real workspaceImplicitWidth: (monitorData?.transform % 2 === 1) ?
         ((monitor.height - monitorData?.reserved[0] - monitorData?.reserved[2]) * root.scale / monitor.scale) :
         ((monitor.width - monitorData?.reserved[0] - monitorData?.reserved[2]) * root.scale / monitor.scale)
-    property real workspaceImplicitHeight: (monitorData?.transform % 2 === 1) ? 
+    property real workspaceImplicitHeight: (monitorData?.transform % 2 === 1) ?
         ((monitor.width - monitorData?.reserved[1] - monitorData?.reserved[3]) * root.scale / monitor.scale) :
         ((monitor.height - monitorData?.reserved[1] - monitorData?.reserved[3]) * root.scale / monitor.scale)
     property real largeWorkspaceRadius: Appearance.rounding.large
@@ -52,7 +53,7 @@ Item {
 
     property Component windowComponent: OverviewWindow {}
     property list<OverviewWindow> windowWidgets: []
-    
+
     function getWsRow(ws) {
         // 1-indexed workspace, 0-indexed row
         var normalRow = Math.floor((ws - 1) / Config.options.overview.columns) % Config.options.overview.rows;
@@ -88,7 +89,7 @@ Item {
             z: root.workspaceZ
             anchors.centerIn: parent
             spacing: workspaceSpacing
-            
+
             Repeater {
                 model: Config.options.overview.rows
                 delegate: Row {
@@ -212,10 +213,10 @@ Item {
                     property bool workspaceAtRight: workspaceColIndex === Config.options.overview.columns - 1
                     property bool workspaceAtTop: workspaceRowIndex === 0
                     property bool workspaceAtBottom: workspaceRowIndex === Config.options.overview.rows - 1
-                    property bool workspaceAtTopLeft: (workspaceAtLeft && workspaceAtTop) 
-                    property bool workspaceAtTopRight: (workspaceAtRight && workspaceAtTop) 
-                    property bool workspaceAtBottomLeft: (workspaceAtLeft && workspaceAtBottom) 
-                    property bool workspaceAtBottomRight: (workspaceAtRight && workspaceAtBottom) 
+                    property bool workspaceAtTopLeft: (workspaceAtLeft && workspaceAtTop)
+                    property bool workspaceAtTopRight: (workspaceAtRight && workspaceAtTop)
+                    property bool workspaceAtBottomLeft: (workspaceAtLeft && workspaceAtBottom)
+                    property bool workspaceAtBottomRight: (workspaceAtRight && workspaceAtBottom)
                     property real distanceFromLeftEdge: xWithinWorkspaceWidget
                     property real distanceFromRightEdge: root.workspaceImplicitWidth - (xWithinWorkspaceWidget + targetWindowWidth)
                     property real distanceFromTopEdge: yWithinWorkspaceWidget
@@ -339,6 +340,102 @@ Item {
                 Behavior on bottomRightRadius {
                     animation: Appearance.animation.elementMoveEnter.numberAnimation.createObject(this)
                 }
+            }
+        }
+
+        // App Shortcuts Section
+        StyledRectangularShadow {
+            target: appShortcutsContainer
+        }
+
+        Rectangle { // app shortcuts
+            id: appShortcutsContainer
+            anchors {
+                top: overviewBackground.bottom
+                horizontalCenter: overviewBackground.horizontalCenter
+                topMargin: 10
+            }
+
+            height: 80
+            radius: Appearance.rounding.normal
+            color: Appearance.colors.colBackgroundSurfaceContainer
+
+            Row {
+                id: appShortcutsRow
+                anchors.centerIn: parent
+                spacing: 15
+
+                AppShortcut {
+                    appName: "Firefox"
+                    appCommand: "firefox"
+                }
+
+                AppShortcut {
+                    appName: "VS Code"
+                    appCommand: "code"
+                }
+
+                AppShortcut {
+                    appName: "Discord"
+                    appCommand: "discord"
+                }
+
+                AppShortcut {
+                    appName: "Terminal"
+                    appCommand: "konsole"
+                }
+
+                AppShortcut {
+                    appName: "File Manager"
+                    appCommand: "dolphin"
+                }
+            }
+
+
+            implicitWidth: appShortcutsRow.implicitWidth + Appearance.sizes.elevationMargin * 2
+
+        }
+
+        component AppShortcut: Rectangle {
+            property string appName: ""
+            property string appIcon: ""
+            property string appCommand: ""
+
+            width: 60
+            height: 60
+            radius: Appearance.rounding.small
+            color: mouseArea.containsMouse ?
+                Appearance.colors.colLayer1Hover :
+                Appearance.colors.colSurfaceContainerHigh
+
+            border.width: 1
+            border.color: mouseArea.containsMouse ?
+                        Appearance.colors.colSecondary :
+                        "transparent"
+
+            Image {
+                id: appIconImage
+                anchors.centerIn: parent
+                source: Quickshell.iconPath(AppSearch.guessIcon(appCommand), "image-missing")
+                width: parent.width * 0.6
+                height: parent.height * 0.6
+                fillMode: Image.PreserveAspectFit
+            }
+
+            MouseArea {
+                id: mouseArea
+                anchors.fill: parent
+                hoverEnabled: true
+                onClicked: {
+                    GlobalStates.overviewOpen = false
+                    Hyprland.dispatch(`hl.dsp.exec_cmd("${appCommand}")`)
+                }
+            }
+
+            StyledToolTip {
+                extraVisibleCondition: false
+                alternativeVisibleCondition: mouseArea.containsMouse
+                text: appName
             }
         }
     }

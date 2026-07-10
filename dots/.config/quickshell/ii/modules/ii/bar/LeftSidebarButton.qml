@@ -23,10 +23,11 @@ RippleButton {
     colBackgroundToggled: Appearance.colors.colSecondaryContainer
     colBackgroundToggledHover: Appearance.colors.colSecondaryContainerHover
     colRippleToggled: Appearance.colors.colSecondaryContainerActive
-    toggled: GlobalStates.sidebarLeftOpen
+    // toggled: GlobalStates.sidebarLeftOpen
 
     onPressed: {
-        GlobalStates.sidebarLeftOpen = !GlobalStates.sidebarLeftOpen;
+        // GlobalStates.sidebarLeftOpen = !GlobalStates.sidebarLeftOpen;
+        GlobalStates.overviewOpen = !GlobalStates.overviewOpen;
     }
 
     Connections {

@@ -1,3 +1,4 @@
+import qs
 import qs.services
 import qs.modules.common
 import qs.modules.common.widgets
@@ -7,7 +8,7 @@ import Quickshell
 import Quickshell.Wayland
 import Quickshell.Hyprland
 
-Item {
+RippleButton {
     id: root
     readonly property HyprlandMonitor monitor: Hyprland.monitorFor(root.QsWindow.window?.screen)
     readonly property Toplevel activeWindow: ToplevelManager.activeToplevel
@@ -16,7 +17,10 @@ Item {
     property bool focusingThisMonitor: HyprlandData.activeWorkspace?.monitor == monitor?.name
     property var biggestWindow: HyprlandData.biggestWindowForWorkspace(HyprlandData.monitors[root.monitor?.id]?.activeWorkspace.id)
 
-    implicitWidth: colLayout.implicitWidth
+    // implicitWidth: colLayout.implicitWidth
+    onPressed: {
+        GlobalStates.overviewOpen = !GlobalStates.overviewOpen;
+    }
 
     ColumnLayout {
         id: colLayout
@@ -25,13 +29,14 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
         spacing: -4
+        anchors.margins: 8
 
         StyledText {
             Layout.fillWidth: true
             font.pixelSize: Appearance.font.pixelSize.smaller
             color: Appearance.colors.colSubtext
             elide: Text.ElideRight
-            text: root.focusingThisMonitor && root.activeWindow?.activated && root.biggestWindow ? 
+            text: root.focusingThisMonitor && root.activeWindow?.activated && root.biggestWindow ?
                 root.activeWindow?.appId :
                 (root.biggestWindow?.class) ?? Translation.tr("Desktop")
 
@@ -42,7 +47,7 @@ Item {
             font.pixelSize: Appearance.font.pixelSize.small
             color: Appearance.colors.colOnLayer0
             elide: Text.ElideRight
-            text: root.focusingThisMonitor && root.activeWindow?.activated && root.biggestWindow ? 
+            text: root.focusingThisMonitor && root.activeWindow?.activated && root.biggestWindow ?
                 root.activeWindow?.title :
                 (root.biggestWindow?.title) ?? `${Translation.tr("Workspace")} ${monitor?.activeWorkspace?.id ?? 1}`
         }

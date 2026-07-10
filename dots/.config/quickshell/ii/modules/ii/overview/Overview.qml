@@ -27,9 +27,9 @@ Scope {
         WlrLayershell.keyboardFocus: GlobalStates.overviewOpen ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
         color: "transparent"
 
-        mask: Region {
-            item: GlobalStates.overviewOpen ? columnLayout : null
-        }
+        // mask: Region {
+        //     item: GlobalStates.overviewOpen ? columnLayout : null
+        // }
 
         anchors {
             top: true

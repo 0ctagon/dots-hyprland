@@ -238,9 +238,10 @@ Item { // Bar content region
                     id: indicatorsRowLayout
                     anchors.centerIn: parent
                     property real realSpacing: 15
+                    property real realSpacing2: 10
                     spacing: 0
 
-
+                    // TODO
                     // SysTray {
                     //     visible: root.useShortenedForm === 0
                     //     Layout.fillWidth: false
@@ -248,23 +249,22 @@ Item { // Bar content region
                     //     invertSide: Config?.options.bar.bottom
                     //     Layout.leftMargin: -245
                     // }
-                    BatteryIndicator {
-                        visible: (root.useShortenedForm < 2 && Battery.available)
-                        Layout.alignment: Qt.AlignVCenter
-                        Layout.leftMargin: -40
-                    }
 
-
+                    // Info widgets, in visual (left-to-right) order
                     Resources {
                         alwaysShowAllResources: root.useShortenedForm === 2
                         Layout.fillWidth: root.useShortenedForm === 2
-                        Layout.leftMargin: -220
+                        Layout.rightMargin: indicatorsRowLayout.realSpacing2
                     }
 
+                    BatteryIndicator {
+                        visible: (root.useShortenedForm < 2 && Battery.available)
+                        Layout.alignment: Qt.AlignVCenter
+                        Layout.rightMargin: indicatorsRowLayout.realSpacing2
+                    }
 
                     BarGroup {
                         id: rightCenterGroupContent
-                        anchors.fill: parent
 
                         UtilButtons {
                             visible: (Config.options.bar.verbose && root.useShortenedForm === 0)

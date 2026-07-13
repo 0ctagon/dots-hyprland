@@ -22,4 +22,12 @@ hl.on("hyprland.start", function ()
 
     -- Cursor
     hl.exec_cmd("hyprctl setcursor Bibata-Modern-Classic 24")
+
+    -- hyprpm
+    hl.exec_cmd("hyprpm reload")
+end)
+
+-- Runs on every `hyprctl reload` (NOT on initial startup)
+hl.on("config.reloaded", function ()
+   hl.exec_cmd("hyprpm reload")
 end)

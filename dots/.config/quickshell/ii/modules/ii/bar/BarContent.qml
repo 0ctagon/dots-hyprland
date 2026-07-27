@@ -241,15 +241,6 @@ Item { // Bar content region
                     property real realSpacing2: 10
                     spacing: 0
 
-                    // TODO
-                    // SysTray {
-                    //     visible: root.useShortenedForm === 0
-                    //     Layout.fillWidth: false
-                    //     Layout.fillHeight: true
-                    //     invertSide: Config?.options.bar.bottom
-                    //     Layout.leftMargin: -245
-                    // }
-
                     // Info widgets, in visual (left-to-right) order
                     Resources {
                         alwaysShowAllResources: root.useShortenedForm === 2
@@ -261,6 +252,13 @@ Item { // Bar content region
                         visible: (root.useShortenedForm < 2 && Battery.available)
                         Layout.alignment: Qt.AlignVCenter
                         Layout.rightMargin: indicatorsRowLayout.realSpacing2
+                    }
+
+                    SysTrayCollapsed {
+                        Layout.alignment: Qt.AlignVCenter
+                        // Shifted right by half of the util buttons' BarGroup padding, so it sits centered between the two
+                        Layout.leftMargin: 13
+                        Layout.rightMargin: indicatorsRowLayout.realSpacing2 - 13
                     }
 
                     BarGroup {

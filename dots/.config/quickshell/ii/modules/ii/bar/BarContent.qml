@@ -254,20 +254,25 @@ Item { // Bar content region
                         Layout.rightMargin: indicatorsRowLayout.realSpacing2
                     }
 
-                    SysTrayCollapsed {
-                        Layout.alignment: Qt.AlignVCenter
-                        // Shifted right by half of the util buttons' BarGroup padding, so it sits centered between the two
-                        Layout.leftMargin: 13
-                        Layout.rightMargin: indicatorsRowLayout.realSpacing2 - 13
-                    }
-
                     BarGroup {
                         id: rightCenterGroupContent
+                        padding: 0 // Spacing is set by the neighbours' margins instead
 
                         UtilButtons {
                             visible: (Config.options.bar.verbose && root.useShortenedForm === 0)
                             Layout.alignment: Qt.AlignVCenter
                         }
+                    }
+
+                    SysTrayCollapsed {
+                        Layout.alignment: Qt.AlignVCenter
+                        Layout.leftMargin: 5
+                    }
+
+                    MediaCollapsed {
+                        Layout.alignment: Qt.AlignVCenter
+                        Layout.leftMargin: indicatorsRowLayout.realSpacing2
+                        Layout.rightMargin: indicatorsRowLayout.realSpacing2
                     }
 
                     Revealer {

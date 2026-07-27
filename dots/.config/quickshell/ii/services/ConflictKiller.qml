@@ -24,7 +24,17 @@ Singleton {
 
     Process {
         id: checkConflictsProc
-        command: ["bash", "-c", `echo "$(pidof kded6);$(pidof mako dunst)"`]
+        // kded6 only conflicts when it actually holds the StatusNotifierWatcher name.
+        // Its other modules (bluetooth, network, ...) are harmless, so don't report it
+        // as a conflict just for being alive.
+        command: ["bash", "-c", `
+            tray_conflict=""
+            owner_pid=$(busctl --user list --no-pager 2>/dev/null | awk '$1 == "org.kde.StatusNotifierWatcher" { print $2; exit }')
+            if [ -n "$owner_pid" ] && [ "$owner_pid" != "-" ]; then
+                case " $(pidof kded6) " in *" $owner_pid "*) tray_conflict="$owner_pid";; esac
+            fi
+            echo "$tray_conflict;$(pidof mako dunst)"
+        `]
         stdout: StdioCollector {
             onStreamFinished: {
                 const output = this.text;

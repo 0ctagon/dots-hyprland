@@ -306,6 +306,13 @@ Item { // Bar content region
                         Layout.rightMargin: indicatorsRowLayout.realSpacing
                         color: rightSidebarButton.colText
                     }
+                    MaterialSymbol {
+                        Layout.rightMargin: indicatorsRowLayout.realSpacing
+                        visible: BluetoothStatus.available
+                        text: BluetoothStatus.connected ? "bluetooth_connected" : BluetoothStatus.enabled ? "bluetooth" : "bluetooth_disabled"
+                        iconSize: Appearance.font.pixelSize.larger
+                        color: rightSidebarButton.colText
+                    }
                     Item {
                         Layout.alignment: Qt.AlignVCenter
                         implicitWidth: networkSymbol.implicitWidth
@@ -327,13 +334,6 @@ Item { // Bar content region
                             baseIconSize: networkSymbol.iconSize
                             color: rightSidebarButton.colText
                         }
-                    }
-                    MaterialSymbol {
-                        Layout.leftMargin: indicatorsRowLayout.realSpacing
-                        visible: BluetoothStatus.available
-                        text: BluetoothStatus.connected ? "bluetooth_connected" : BluetoothStatus.enabled ? "bluetooth" : "bluetooth_disabled"
-                        iconSize: Appearance.font.pixelSize.larger
-                        color: rightSidebarButton.colText
                     }
 
                     ClockWidget {

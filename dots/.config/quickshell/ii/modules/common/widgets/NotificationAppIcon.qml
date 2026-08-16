@@ -1,5 +1,6 @@
 import qs.modules.common
 import qs.modules.common.functions
+import qs.services
 import Qt5Compat.GraphicalEffects
 import QtQuick
 import Quickshell
@@ -9,7 +10,20 @@ import Quickshell.Services.Notifications
 MaterialShape { // App icon
     id: root
     property var appIcon: ""
+    property var appName: ""
     property var summary: ""
+    // Resolved icon name: the notification's app_icon hint is often not a valid
+    // icon theme name (e.g. nordvpn), so fall back to guessing from it and the app name
+    readonly property bool appIconIsPath: String(root.appIcon ?? "").startsWith("/") || String(root.appIcon ?? "").startsWith("file:")
+    readonly property string resolvedIcon: {
+        if (root.appIconIsPath) return root.appIcon;
+        if (AppSearch.iconExists(root.appIcon)) return root.appIcon;
+        const iconGuess = AppSearch.guessIcon(root.appIcon ?? "");
+        if (AppSearch.iconExists(iconGuess)) return iconGuess;
+        const nameGuess = AppSearch.guessIcon(root.appName ?? "");
+        if (AppSearch.iconExists(nameGuess)) return nameGuess;
+        return "";
+    }
     property var urgency: NotificationUrgency.Normal
     property bool isUrgent: urgency === NotificationUrgency.Critical
     property var image: ""
@@ -30,7 +44,7 @@ MaterialShape { // App icon
     color: isUrgent ? Appearance.colors.colPrimaryContainer : Appearance.colors.colSecondaryContainer
     Loader {
         id: materialSymbolLoader
-        active: root.appIcon == "" && root.image == ""
+        active: root.resolvedIcon == "" && root.image == ""
         anchors.fill: parent
         sourceComponent: MaterialSymbol {
             text: {
@@ -48,13 +62,13 @@ MaterialShape { // App icon
     }
     Loader {
         id: appIconLoader
-        active: root.image == "" && root.appIcon != ""
+        active: root.image == "" && root.resolvedIcon != ""
         anchors.centerIn: parent
         sourceComponent: IconImage {
             id: appIconImage
             implicitSize: root.appIconSize
             asynchronous: true
-            source: Quickshell.iconPath(root.appIcon, "image-missing")
+            source: root.appIconIsPath ? root.resolvedIcon : Quickshell.iconPath(root.resolvedIcon, "image-missing")
         }
     }
     Loader {
@@ -85,13 +99,13 @@ MaterialShape { // App icon
             }
             Loader {
                 id: notifImageAppIconLoader
-                active: root.appIcon != ""
+                active: root.resolvedIcon != ""
                 anchors.bottom: parent.bottom
                 anchors.right: parent.right
                 sourceComponent: IconImage {
                     implicitSize: root.smallAppIconSize
                     asynchronous: true
-                    source: Quickshell.iconPath(root.appIcon, "image-missing")
+                    source: root.appIconIsPath ? root.resolvedIcon : Quickshell.iconPath(root.resolvedIcon, "image-missing")
                 }
             }
         }

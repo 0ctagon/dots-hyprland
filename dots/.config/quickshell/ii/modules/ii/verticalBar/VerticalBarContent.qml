@@ -272,10 +272,27 @@ Item { // Bar content region
                             id: notificationUnreadCount
                         }
                     }
-                    MaterialSymbol {
-                        text: Network.materialSymbol
-                        iconSize: Appearance.font.pixelSize.larger
-                        color: rightSidebarButton.colText
+                    Item {
+                        Layout.alignment: Qt.AlignHCenter
+                        implicitWidth: networkSymbol.implicitWidth
+                        implicitHeight: networkSymbol.implicitHeight
+
+                        MaterialSymbol {
+                            id: networkSymbol
+                            anchors.centerIn: parent
+                            text: Network.materialSymbol
+                            iconSize: Appearance.font.pixelSize.larger
+                            color: rightSidebarButton.colText
+                        }
+
+                        Bar.VpnBadge {
+                            anchors.right: networkSymbol.right
+                            anchors.bottom: networkSymbol.bottom
+                            anchors.rightMargin: -2
+                            anchors.bottomMargin: Math.round(networkSymbol.iconSize * 0.1)
+                            baseIconSize: networkSymbol.iconSize
+                            color: rightSidebarButton.colText
+                        }
                     }
                     MaterialSymbol {
                         Layout.topMargin: indicatorsColumnLayout.realSpacing

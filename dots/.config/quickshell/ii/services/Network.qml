@@ -16,6 +16,9 @@ Singleton {
 
     property bool wifi: true
     property bool ethernet: false
+    property bool vpn: false
+    property bool internetReachable: true
+    onInternetReachableChanged: updateConnectionType.startCheck()
 
     property bool wifiEnabled: false
     property bool wifiScanning: false
@@ -155,6 +158,7 @@ Singleton {
     // Status update
     function update() {
         updateConnectionType.startCheck();
+        internetCheck.request();
         wifiStatusProcess.running = true
         updateNetworkName.running = true;
         updateNetworkStrength.running = true;
@@ -172,7 +176,8 @@ Singleton {
     Process {
         id: updateConnectionType
         property string buffer
-        command: ["sh", "-c", "nmcli -t -f TYPE,STATE d status && nmcli -t -f CONNECTIVITY g"]
+        // Device lines, then a line of comma-joined active connection types (for VPN detection)
+        command: ["sh", "-c", "nmcli -t -f TYPE,STATE d status && { printf 'active-types:'; nmcli -t -f TYPE c show --active | paste -sd, -; }"]
         running: true
         function startCheck() {
             buffer = "";
@@ -185,7 +190,8 @@ Singleton {
         }
         onExited: (exitCode, exitStatus) => {
             const lines = updateConnectionType.buffer.trim().split('\n');
-            const connectivity = lines.pop() // none, limited, full
+            const activeTypes = lines.pop().replace("active-types:", "").split(',');
+            const hasVpn = activeTypes.some(t => ["vpn", "wireguard", "tun", "tap"].includes(t));
             let hasEthernet = false;
             let hasWifi = false;
             let wifiStatus = "disconnected";
@@ -200,7 +206,7 @@ Singleton {
                         hasWifi = true;
                         wifiStatus = "connected"
 
-                        if (connectivity === "limited") {
+                        if (!root.internetReachable) {
                             hasWifi = false;
                             wifiStatus = "limited"
                         }
@@ -216,7 +222,36 @@ Singleton {
             root.wifiStatus = wifiStatus;
             root.ethernet = hasEthernet;
             root.wifi = hasWifi;
+            root.vpn = hasVpn;
         }
+    }
+
+    // NetworkManager's own connectivity check binds to the physical device, so a VPN kill switch
+    // makes it time out or report "limited" even while the tunnel works. Probe over the default
+    // route instead: that goes through the tunnel when it's up and is blocked when it isn't.
+    Process {
+        id: internetCheck
+        property double lastRun: 0
+        command: ["curl", "-sf", "-m", "5", "http://nmcheck.gnome.org/check_network_status.txt"]
+        function request() { // Rate limited, since network events can come in bursts
+            const now = Date.now();
+            if (running || now - lastRun < 5000)
+                return;
+            lastRun = now;
+            running = true;
+        }
+        // Only decided from stdout: a failed curl ends with empty output, which reads as offline
+        stdout: StdioCollector {
+            onStreamFinished: root.internetReachable = (text.trim() === "NetworkManager is online")
+        }
+    }
+
+    Timer { // Catches the kill switch cutting traffic without any NetworkManager event
+        interval: 20000
+        running: true
+        repeat: true
+        triggeredOnStart: true
+        onTriggered: internetCheck.request()
     }
 
     Process {

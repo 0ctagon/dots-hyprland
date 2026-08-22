@@ -47,6 +47,18 @@ Item { // Bar content region
         border.color: Appearance.colors.colLayer0Border
     }
 
+    NotificationEdgeBadge { // Unread notifications, right edge of the bar
+        anchors {
+            right: barBackground.right
+            top: barBackground.top
+            bottom: barBackground.bottom
+            rightMargin: 4
+            topMargin: 4
+            bottomMargin: 4
+        }
+        z: 2
+    }
+
     FocusedScrollMouseArea { // Left side | scroll to change brightness
         id: barLeftSideMouseArea
 

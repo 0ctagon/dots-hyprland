@@ -8,7 +8,6 @@ Item {
     id: root
     property bool borderless: Config.options.bar.borderless
     property bool showDate: Config.options.bar.verbose
-    readonly property bool showUnreadCount: Config.options.bar.indicators.notifications.showUnreadCount
     implicitWidth: rowLayout.implicitWidth
     implicitHeight: Appearance.sizes.barHeight
 
@@ -35,32 +34,6 @@ Item {
             font.pixelSize: Appearance.font.pixelSize.normal
             color: Appearance.colors.colOnLayer1
             text: DateTime.time
-        }
-    }
-
-    Rectangle { // Unread notification badge, overlays the clock's top right corner
-        id: notifBadge
-        visible: Notifications.unread > 0
-        anchors {
-            right: rowLayout.right
-            top: rowLayout.top
-            rightMargin: -implicitWidth
-            topMargin: -2
-        }
-        z: 1
-
-        radius: Appearance.rounding.full
-        color: Notifications.silent ? Appearance.colors.colOutline : Appearance.colors.colOnLayer0
-        implicitHeight: root.showUnreadCount ? Math.max(badgeText.implicitHeight, badgeText.implicitWidth) : 8
-        implicitWidth: root.showUnreadCount ? Math.max(implicitHeight, badgeText.implicitWidth + 4) : 8
-
-        StyledText {
-            id: badgeText
-            visible: root.showUnreadCount
-            anchors.centerIn: parent
-            font.pixelSize: Appearance.font.pixelSize.smallest
-            color: Appearance.colors.colLayer0
-            text: Notifications.unread
         }
     }
 

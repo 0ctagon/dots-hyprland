@@ -9,25 +9,10 @@ local hyprScripts = "$HOME/.config/hypr/hyprland/scripts"
 local qsIpcCall = "qs -c $qsConfig ipc call"
 local qsIsAlive = qsIpcCall .. " TEST_ALIVE"
 
-hl.bind("SUPER + SUPER_L", hl.dsp.global("quickshell:searchToggleRelease"), { description = "Shell: Toggle search" })
-hl.bind("SUPER + SUPER_R", hl.dsp.global("quickshell:searchToggleRelease"))
-hl.bind("SUPER + SUPER_L", hl.dsp.exec_cmd(qsIsAlive .. " || pkill fuzzel || fuzzel"))
-hl.bind("SUPER + SUPER_R", hl.dsp.exec_cmd(qsIsAlive .. " || pkill fuzzel || fuzzel"))
-
--- searchToggleRelease fires on Super release no matter what was pressed while Super was held,
--- so tell Quickshell when Super is combined with something else.
-local KEYCODE_SUPER_L, KEYCODE_SUPER_R = 133, 134
-local superHeld = false
-hl.on("input.keyboard.key", function(keycode, _, state)
-    if keycode == KEYCODE_SUPER_L or keycode == KEYCODE_SUPER_R then
-        superHeld = state == 1
-    elseif superHeld and state == 1 then
-        hl.dispatch(hl.dsp.global("quickshell:searchToggleReleaseInterrupt"))
-    end
-end)
-for _, button in ipairs({ ":272", ":273", ":274", ":275", ":276", ":277", "_up", "_down" }) do
-    hl.bind("SUPER + mouse" .. button, hl.dsp.global("quickshell:searchToggleReleaseInterrupt"), { non_consuming = true })
-end
+local searchToggle = hl.dsp.exec_cmd(qsIpcCall .. " search toggle || pkill fuzzel || fuzzel")
+hl.bind("SUPER + SUPER_L", searchToggle,
+    { release = true, description = "Shell: Toggle search" })
+hl.bind("SUPER + SUPER_R", searchToggle, { release = true })
 
 hl.bind("SUPER_L", hl.dsp.global("quickshell:workspaceNumber"), { ignore_mods = true, transparent = true })
 hl.bind("SUPER_R", hl.dsp.global("quickshell:workspaceNumber"), { ignore_mods = true, transparent = true })

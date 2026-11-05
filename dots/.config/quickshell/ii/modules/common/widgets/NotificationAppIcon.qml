@@ -18,10 +18,12 @@ MaterialShape { // App icon
     readonly property string resolvedIcon: {
         if (root.appIconIsPath) return root.appIcon;
         if (AppSearch.iconExists(root.appIcon)) return root.appIcon;
+        // guessIcon() gives up with a generic icon: treat that as no match so the material symbol is used
+        const isMatch = guess => guess !== "application-x-executable" && AppSearch.iconExists(guess);
         const iconGuess = AppSearch.guessIcon(root.appIcon ?? "");
-        if (AppSearch.iconExists(iconGuess)) return iconGuess;
+        if (isMatch(iconGuess)) return iconGuess;
         const nameGuess = AppSearch.guessIcon(root.appName ?? "");
-        if (AppSearch.iconExists(nameGuess)) return nameGuess;
+        if (isMatch(nameGuess)) return nameGuess;
         return "";
     }
     property var urgency: NotificationUrgency.Normal

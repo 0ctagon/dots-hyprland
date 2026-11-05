@@ -4,7 +4,7 @@ import Quickshell
 Singleton {
     id: root
     /**
-     * @param { string } summary 
+     * @param { string } summary
      * @returns { string }
      */
     function findSuitableMaterialSymbol(summary = "") {
@@ -52,7 +52,7 @@ Singleton {
     }
 
     /**
-     * @param { number | string | Date } timestamp 
+     * @param { number | string | Date } timestamp
      * @returns { string }
      */
     function getFriendlyNotifTimeString(timestamp) {
@@ -87,7 +87,7 @@ Singleton {
 
     function processNotificationBody(body, appName) {
         let processedBody = body
-        
+
         // Clean Chromium-based browsers notifications - remove first line
         if (appName) {
             const lowerApp = appName.toLowerCase()
@@ -105,7 +105,7 @@ Singleton {
         }
 
         processedBody = processedBody.replace(/<img/gi, '\n\n<img');
-        
+
         return processedBody
     }
 }

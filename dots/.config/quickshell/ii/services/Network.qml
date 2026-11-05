@@ -232,7 +232,7 @@ Singleton {
     Process {
         id: internetCheck
         property double lastRun: 0
-        command: ["curl", "-sf", "-m", "5", "http://nmcheck.gnome.org/check_network_status.txt"]
+        command: ["curl", "-sf", "-m", "5", "https://nmcheck.gnome.org/check_network_status.txt"]
         function request() { // Rate limited, since network events can come in bursts
             const now = Date.now();
             if (running || now - lastRun < 5000)

@@ -81,7 +81,7 @@ Singleton {
     }
 
     function getData() {
-        let command = "curl -s wttr.in";
+        let command = "curl -s https://wttr.in";
 
         if (root.gpsActive && root.location.valid) {
             command += `/${root.location.lat},${root.location.long}`;
